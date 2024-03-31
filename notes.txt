@@ -1,0 +1,3 @@
+link nui dir from current version
+link electron_helper and update.js from current version
+check update url in config.json
