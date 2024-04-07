@@ -27,7 +27,6 @@ async function initElectron(){
 
 	g.config = await electron_helper.tools.readJSON(fp);
 	g.win.show();
-	console.log(window.electron_helper.id);
 	console.log(g.config);
 	//tools.versionInfo();
 	appStart();
@@ -48,7 +47,7 @@ async function appStart(){
 	)
 	let card = ut.createElement('div', {class:'nui-card', target:g.content, inner:'<div class="nui-button-container"></div>'})
 	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => { snippets.loadImage('X:\\# Photos\\# Misc\\Echo.png',g.content)}}, inner:'Test'})
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => {snippets.spawnWindow()}}, inner:'SpawnWindow'})
+	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => {snippets.spawnWindow({parentID:electron_helper.id, modal:true})}}, inner:'SpawnWindow'})
 }
 
 
