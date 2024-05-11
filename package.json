@@ -1,7 +1,7 @@
 {
-  "name": "electron_blank",
+  "name": "electron_sd2",
   "version": "1.0.0",
-  "description": "Blank Electron Project",
+  "description": "Wrapper for Stable Diffusion Web-Based Apps",
   "main": "js/app.js",
   "scripts": {
     "start": "electron-forge start",
@@ -10,14 +10,14 @@
     "make": "electron-forge make"
   },
   "build": {
-    "appId": "com.raum.blank",
+    "appId": "com.raum.sd2",
     "win": {
       "target": [
         "portable"
       ]
     },
     "portable": {
-      "artifactName": "blank.exe",
+      "artifactName": "sd2.exe",
       "useZip": true
     },
     "files": [
