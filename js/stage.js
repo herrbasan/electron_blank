@@ -3,7 +3,6 @@
 import nui from '../nui/nui.js';
 import nui_app from '../nui/nui_app.js';
 import snippets from './snippets.js';
-
 let g = {};
 
 // Init
