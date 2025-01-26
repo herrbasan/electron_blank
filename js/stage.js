@@ -27,7 +27,7 @@ async function initElectron(){
 	g.config = await electron_helper.tools.readJSON(fp);
 	g.win.show();
 	console.log(g.config);
-	//tools.versionInfo();
+	electron_helper.tools.versionInfo();
 	appStart();
 }
 
