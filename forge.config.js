@@ -1,5 +1,3 @@
-const { FusesPlugin } = require('@electron-forge/plugin-fuses');
-const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('path');
 
 module.exports = {
@@ -10,7 +8,7 @@ module.exports = {
       "config.json",
       "./build/icons/"
     ],
-    executableName: 'electronBlank',
+    executableName: 'radioPlay',
     icon:path.join(__dirname, 'build', 'icons', 'nui-icon-app-fullscreen.ico'),
   },
   rebuildConfig: {},
@@ -18,28 +16,11 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        name: 'electronBlank',
-        setupExe: 'blank_setup.exe',
+        name: 'radioPlay',
+        setupExe: 'radioPlay_setup.exe',
         setupIcon: path.join(__dirname, 'build', 'icons', 'nui-icon-installer.ico'),
         iconUrl:'https://raum.com/update/nui/nui-icon-app-fullscreen.ico',
       },
     }
-  ],
-  plugins: [
-    {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
-    },
-    // Fuses are used to enable/disable various Electron functionality
-    // at package time, before code signing the application
-    new FusesPlugin({
-      version: FuseVersion.V1,
-      [FuseV1Options.RunAsNode]: false,
-      [FuseV1Options.EnableCookieEncryption]: true,
-      [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
-      [FuseV1Options.EnableNodeCliInspectArguments]: false,
-      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
-      [FuseV1Options.OnlyLoadAppFromAsar]: true,
-    }),
-  ],
+  ]
 };
