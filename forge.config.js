@@ -8,7 +8,7 @@ module.exports = {
       "config.json",
       "./build/icons/"
     ],
-    executableName: 'radioPlay',
+    executableName: 'blank',
     icon:path.join(__dirname, 'build', 'icons', 'nui-icon-app-fullscreen.ico'),
   },
   rebuildConfig: {},
@@ -16,8 +16,8 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        name: 'radioPlay',
-        setupExe: 'radioPlay_setup.exe',
+        name: 'blank',
+        setupExe: 'blank_setup.exe',
         setupIcon: path.join(__dirname, 'build', 'icons', 'nui-icon-installer.ico'),
         iconUrl:'https://raum.com/update/nui/nui-icon-app-fullscreen.ico',
       },
