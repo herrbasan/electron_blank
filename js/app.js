@@ -2,7 +2,7 @@
 const {app, BrowserWindow, Menu} = require('electron');
 const path = require('path');
 const fs = require("fs").promises;
-const helper = require('../electron_helper/helper.js');
+const helper = require('../electron_helper/helper_new.js');
 const update = require('../electron_helper/update.js');
 
 //app.commandLine.appendSwitch('high-dpi-support', 'false');
@@ -65,7 +65,7 @@ function startUp(){
 async function appStart(){
     fb('Init Windows');
 	let win = await helper.tools.browserWindow('frameless', {
-		webPreferences:{preload: path.join(__dirname, '../electron_helper/helper.js')},
+		webPreferences:{preload: path.join(__dirname, '../electron_helper/helper_new.js')},
 		devTools: !env.isPackaged,
 		width:960, 
 		height:740,
