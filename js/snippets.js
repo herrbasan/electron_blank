@@ -46,7 +46,7 @@ function spawnWindow(prop){
 					import ut from './nui/nui_ut.js';
 					import nui_app from './nui/nui_app.js';
 					document.addEventListener('DOMContentLoaded', async () => {
-						await nui_app.appWindow({inner:ut.el('body'), fnc_close:window.electron_helper.window.close, icon:ut.icon('settings')});
+						await nui_app.appWindow({inner:ut.el('body'), statusbar:true, fnc_close:window.electron_helper.window.close, icon:ut.icon('settings')});
 						await ut.headImport({url:'./css/main.css', type:'css'});
 					}, {conce:true})
 				</script>
