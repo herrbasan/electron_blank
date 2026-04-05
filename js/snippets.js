@@ -21,7 +21,7 @@ async function loadImage(url, target){
 
 function spawnWindow(prop){
 	let sub = electron_helper.tools.browserWindow('frameless', {
-		webPreferences:{preload: electron_helper.tools.path.join(__dirname, 'js', '../electron_helper/helper.js')},
+		webPreferences:{preload: electron_helper.tools.path.join(__dirname, 'js', '../electron_helper/helper_new.js')},
 		devTools: false,
 		width:640, 
 		height:480,
