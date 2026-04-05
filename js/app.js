@@ -1,4 +1,5 @@
 'use strict';
+if(require('electron-squirrel-startup')) return;
 const {app, BrowserWindow, Menu} = require('electron');
 const path = require('path');
 const fs = require("fs").promises;
@@ -7,15 +8,10 @@ const update = require('../electron_helper/update.js');
 
 //app.commandLine.appendSwitch('high-dpi-support', 'false');
 //app.commandLine.appendSwitch('force-device-scale-factor', '1');
-//app.commandLine.appendSwitch('--js-flags', '--experimental-module');
+app.commandLine.appendSwitch('--js-flags', '--experimental-module');
 
 let config = {};
-let env = { 
-	isPackaged:app.isPackaged, 
-	app_path:app.getAppPath(), 
-	base_path:path.join(app.getAppPath()),
-	user_path:app.getPath('userData')
-};
+let env = { isPackaged:app.isPackaged, app_path:app.getAppPath(), base_path:path.join(app.getAppPath()) };
 
 
 if (env.isPackaged) {

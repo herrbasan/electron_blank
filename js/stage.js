@@ -3,7 +3,6 @@
 import nui from '../nui/nui.js';
 import nui_app from '../nui/nui_app.js';
 import snippets from './snippets.js';
-
 let g = {};
 
 // Init
@@ -46,20 +45,8 @@ async function appStart(){
 		g.content
 	)
 	let card = ut.createElement('div', {class:'nui-card', target:g.content, inner:'<div class="nui-button-container"></div>'})
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => { snippets.loadImage('Y:\\# Photos\\# Misc\\Echo.png',g.content)}}, inner:'Test'});
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => {snippets.spawnWindow({parentID:electron_helper.id, modal:true})}}, inner:'SpawnWindow'});
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click: async () => {
-			try {
-				const mod = await import('../electron_helper/test.js');
-				if (mod && typeof mod.testHelper === 'function') {
-					mod.testHelper();
-				} else {
-					console.error('testHelper not found in test module');
-				}
-			} catch (err) {
-				console.error('Failed to load/execute test module', err);
-			}
-		}}, inner:'Run Tests'});
+	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => { snippets.loadImage('X:\\# Photos\\# Misc\\Echo.png',g.content)}}, inner:'Test'})
+	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => {snippets.spawnWindow({parentID:electron_helper.id, modal:true})}}, inner:'SpawnWindow'})
 }
 
 
