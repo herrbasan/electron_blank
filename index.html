@@ -2,16 +2,25 @@
 <html>
 	<head>
 		<title>Blank</title>
+		<link rel="stylesheet" href="nui2/NUI/css/nui-theme.css">
+		<link rel="stylesheet" href="nui2/NUI/css/modules/nui-app-window.css">
+		<link rel="stylesheet" href="nui2/NUI/css/modules/nui-dropdown.css">
+		<link rel="stylesheet" href="nui2/NUI/css/modules/nui-context-menu.css">
+		<link rel="stylesheet" href="css/main.css">
 		<script src="js/stage.js" type="module"></script>
 	</head>
 
-	<body class="dark">
+	<body>
 		<main>
 			<section>
-				<div class="nui-card">
+				<nui-dropzone>
+					<div data-drop="addfiles">Add files to list ...</div>
+					<div data-drop="replaceFiles">Replace list ...</div>
+				</nui-dropzone>
+				<nui-card>
 					<h1>A Headline</h1>
 					<p>Some Structure</p>
-				</div>
+				</nui-card>
 			</section>
 		</main>
 	</body>

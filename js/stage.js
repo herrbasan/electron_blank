@@ -1,89 +1,107 @@
 'use strict';
 
-import nui from '../nui/nui.js';
-import nui_app from '../nui/nui_app.js';
-import snippets from './snippets.js';
+import '../nui2/NUI/nui.js';
+import { appWindow } from '../nui2/NUI/lib/modules/nui-app-window.js';
+import { contextMenu } from '../nui2/NUI/lib/modules/nui-context-menu.js';
+
 let g = {};
 
-// Init
-// ###########################################################################
-
-if(window.electron_helper){ initElectron(); }
+if (window.electron_helper) { initElectron(); }
 else { appStart(); }
 
-async function initElectron(){
-	fb('Init Stage')
+async function initElectron() {
+	fb('Init Stage');
 	g.win = electron_helper.window;
 	g.main_env = await electron_helper.global.get('env');
 	g.basePath = g.main_env.base_path;
 	g.app_path = g.main_env.app_path;
 	g.isPackaged = g.main_env.isPackaged;
-	console.log(g.main_env);
-	
+
 	let fp = g.app_path;
-	if(g.isPackaged){fp = electron_helper.tools.path.dirname(g.app_path);}
+	if (g.isPackaged) { fp = electron_helper.tools.path.dirname(g.app_path); }
 	fp = electron_helper.tools.path.join(fp, 'config.json');
 
 	g.config = await electron_helper.tools.readJSON(fp);
 	g.win.show();
-	console.log(g.config);
 	electron_helper.tools.versionInfo();
 	appStart();
 }
 
-async function appStart(){
-	await nui_app.appWindow({inner:ut.el('body'), icon:ut.icon('assessment')});
-	await ut.headImport({url:'./css/main.css', type:'css'});
-	window.addEventListener("keydown", onKey);
-	g.content = ut.el('main section');
-	await nui_app.dropZone(
-		[
-			{name:'addfiles', label:'Add files to list ...'},
-			{name:'replaceFiles', label:'Replace list ...'},
-		], 
-		(fileList) => { console.log(fileList)},
-		g.content
-	)
-	let card = ut.createElement('div', {class:'nui-card', target:g.content, inner:'<div class="nui-button-container"></div>'})
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => { snippets.loadImage('Y:\\# Photos\\# Misc\\Echo.png',g.content)}}, inner:'Test'})
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => {snippets.spawnWindow({parentID:electron_helper.id, modal:true})}}, inner:'SpawnWindow'})
+async function appStart() {
+	const main = document.querySelector('main');
+	const win = appWindow({
+		title: document.title,
+		icon: 'assessment',
+		inner: main,
+		statusbar: true,
+		onClose: () => {
+			if (window.electron_helper) { electron_helper.app.exit(); }
+			else { location.reload(); }
+		}
+	});
+
+	if (window.electron_helper) {
+		electron_helper.window.hook_event('focus', () => win.focus());
+		electron_helper.window.hook_event('blur', () => win.blur());
+
+		
+		document.body.addEventListener('contextmenu', (e) => {
+			e.preventDefault();
+			const menu = buildTitleMenu();
+			menu.show(e.clientX, e.clientY);
+		});
+		
+	}
+
+	win.content.addEventListener('nui-dropzone-drop', (e) => {
+		console.log(e.detail);
+	});
+
+	window.addEventListener('keydown', onKey);
 }
 
-
-
-
-
-// Tools
-// ###########################################################################
+function buildTitleMenu() {
+	return contextMenu([
+		{ label: 'Toggle Theme', action: 'theme' },
+		{ type: 'separator' },
+		{ label: 'Toggle DevTools', action: 'devtools' },
+		{ label: 'Toggle Fullscreen', action: 'fullscreen' },
+		{ label: 'Center Window', action: 'center' },
+		{ type: 'separator' },
+		{ label: 'Close', action: 'close' }
+	], {
+		onAction: async (action) => {
+			if (action === 'theme') {
+				const scheme = document.documentElement.style.colorScheme;
+				document.documentElement.style.colorScheme = scheme === 'dark' ? 'light' : 'dark';
+			}
+			if (action === 'devtools') { await electron_helper.window.toggleDevTools(); }
+			if (action === 'fullscreen') {
+				const isFS = await electron_helper.window.isFullScreen();
+				await electron_helper.window.setFullScreen(!isFS);
+			}
+			if (action === 'center') { await electron_helper.window.center(); }
+			if (action === 'close') { await electron_helper.window.close(); }
+		}
+	});
+}
 
 async function onKey(e) {
-	//fb(e.keyCode)
-	if (e.keyCode == 122) {
-		if(await g.win.isFullScreen()){
-			g.win.setFullScreen(false);
-		}
-		else {
-			g.win.setFullScreen(true);
+	if (e.keyCode === 122) {
+		if (window.electron_helper) {
+			const isFS = await g.win.isFullScreen();
+			g.win.setFullScreen(!isFS);
 		}
 	}
-	if (e.keyCode == 123) {
-		g.win.toggleDevTools();
+	if (e.keyCode === 123) {
+		if (window.electron_helper) { g.win.toggleDevTools(); }
 	}
-	if (e.keyCode == 27) {
-		appExit();
-	}
+	if (e.keyCode === 27) { appExit(); }
 }
 
-function appExit(){
-	if(window.electron_helper){
-		electron_helper.app.exit();
-	}
-	else {
-		location.reload();
-	}
+function appExit() {
+	if (window.electron_helper) { electron_helper.app.exit(); }
+	else { location.reload(); }
 }
 
-
-function fb(o){
-    console.log(o);
-}
+function fb(o) { console.log(o); }
