@@ -45,7 +45,7 @@ async function appStart(){
 		g.content
 	)
 	let card = ut.createElement('div', {class:'nui-card', target:g.content, inner:'<div class="nui-button-container"></div>'})
-	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => { snippets.loadImage('X:\\# Photos\\# Misc\\Echo.png',g.content)}}, inner:'Test'})
+	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => { snippets.loadImage('Y:\\# Photos\\# Misc\\Echo.png',g.content)}}, inner:'Test'})
 	ut.createElement('button', {target:card.el('.nui-button-container'), events:{click:() => {snippets.spawnWindow({parentID:electron_helper.id, modal:true})}}, inner:'SpawnWindow'})
 }
 
