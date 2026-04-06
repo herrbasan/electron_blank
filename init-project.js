@@ -73,14 +73,30 @@ async function init() {
         }
     }
 
-    // Reinitialize git if this is still the original repo
+    // Handle git disconnection
     const gitDir = path.join('.git');
     if (fs.existsSync(gitDir)) {
         const gitConfig = fs.readFileSync(path.join(gitDir, 'config'), 'utf8');
-        if (gitConfig.includes('herrbasan/electron_blank')) {
-            console.log('  → Removing original git history...');
+        const isOriginalRepo = gitConfig.includes('herrbasan/electron_blank');
+        const hasRemoteOrigin = gitConfig.includes('[remote "origin"]');
+        
+        if (isOriginalRepo || hasRemoteOrigin) {
+            console.log('  → Removing original git history and remote...');
             fs.rmSync(gitDir, { recursive: true, force: true });
-            console.log('  ✓ Git history removed. Run "git init" to start fresh.');
+            console.log('  ✓ Disconnected from original repository');
+            
+            const initGit = await question('\nInitialize new git repository? (Y/n): ');
+            if (initGit.toLowerCase() !== 'n') {
+                const { execSync } = require('child_process');
+                try {
+                    execSync('git init', { stdio: 'ignore' });
+                    execSync('git add -A', { stdio: 'ignore' });
+                    execSync('git commit -m "Initial commit"', { stdio: 'ignore' });
+                    console.log('  ✓ New git repository initialized with initial commit');
+                } catch (e) {
+                    console.log('  ✗ Git init failed. Run "git init" manually.');
+                }
+            }
         }
     }
 
