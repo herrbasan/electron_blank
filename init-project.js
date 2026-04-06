@@ -23,11 +23,12 @@ const question = (prompt) => new Promise(resolve => rl.question(prompt, resolve)
 function run(cmd, label) {
     console.log(`  → ${label || cmd}...`);
     try {
-        execSync(cmd, { stdio: 'inherit' });
+        execSync(cmd, { stdio: 'inherit', shell: true });
         console.log(`  ✓ ${label || 'Done'}`);
         return true;
     } catch (e) {
         console.log(`  ✗ Failed: ${e.message}`);
+        console.log(`    (Command: ${cmd})`);
         return false;
     }
 }
@@ -55,11 +56,21 @@ async function init() {
     console.log();
 
     // 1. Update/download nui2 submodule
-    run('git submodule update --init --recursive', 'Downloading NUI2 submodule');
+    const nui2Path = path.join('nui2', 'NUI', 'nui.js');
+    if (!fs.existsSync(nui2Path)) {
+        run('git submodule update --init --recursive', 'Downloading NUI2 submodule');
+    } else {
+        console.log('  ✓ NUI2 submodule already present');
+    }
 
     // 2. Install npm dependencies
     console.log();
-    run('npm install', 'Installing npm dependencies');
+    const nodeModulesPath = path.join('node_modules');
+    if (!fs.existsSync(nodeModulesPath)) {
+        run('npm install', 'Installing npm dependencies');
+    } else {
+        console.log('  ✓ node_modules already present (run "npm install" manually if needed)');
+    }
 
     // 3. Apply project customizations
     console.log();
