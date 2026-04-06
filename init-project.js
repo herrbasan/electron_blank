@@ -4,13 +4,14 @@
 /**
  * Project Initialization Script
  * 
- * Run this after cloning to customize the project for your needs.
+ * Run this after cloning to setup and customize the project.
  * Usage: node init-project.js
  */
 
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const { execSync } = require('child_process');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -18,6 +19,18 @@ const rl = readline.createInterface({
 });
 
 const question = (prompt) => new Promise(resolve => rl.question(prompt, resolve));
+
+function run(cmd, label) {
+    console.log(`  → ${label || cmd}...`);
+    try {
+        execSync(cmd, { stdio: 'inherit' });
+        console.log(`  ✓ ${label || 'Done'}`);
+        return true;
+    } catch (e) {
+        console.log(`  ✗ Failed: ${e.message}`);
+        return false;
+    }
+}
 
 async function init() {
     console.log('╔════════════════════════════════════════════════════════╗');
@@ -29,15 +42,32 @@ async function init() {
     const currentDir = path.basename(process.cwd());
     const defaultName = currentDir !== 'electron_blank' ? currentDir : 'my-electron-app';
 
+    // Collect project info
     const projectName = await question(`Project name (${defaultName}): `) || defaultName;
     const projectTitle = await question(`Window title (${projectName}): `) || projectName;
     const projectDesc = await question(`Description: `) || 'An Electron application';
     const author = await question(`Author: `) || '';
 
     console.log();
-    console.log('Applying changes...');
+    console.log('══════════════════════════════════════════════════════════');
+    console.log('Setting up project...');
+    console.log('══════════════════════════════════════════════════════════');
+    console.log();
 
-    // Files to modify
+    // 1. Update/download nui2 submodule
+    run('git submodule update --init --recursive', 'Downloading NUI2 submodule');
+
+    // 2. Install npm dependencies
+    console.log();
+    run('npm install', 'Installing npm dependencies');
+
+    // 3. Apply project customizations
+    console.log();
+    console.log('══════════════════════════════════════════════════════════');
+    console.log('Customizing project files...');
+    console.log('══════════════════════════════════════════════════════════');
+    console.log();
+
     const files = {
         'package.json': (content) => {
             const pkg = JSON.parse(content);
@@ -63,7 +93,6 @@ async function init() {
         }
     };
 
-    // Process each file
     for (const [file, transform] of Object.entries(files)) {
         if (fs.existsSync(file)) {
             const content = fs.readFileSync(file, 'utf8');
@@ -73,7 +102,13 @@ async function init() {
         }
     }
 
-    // Handle git disconnection
+    // 4. Handle git disconnection
+    console.log();
+    console.log('══════════════════════════════════════════════════════════');
+    console.log('Handling git repository...');
+    console.log('══════════════════════════════════════════════════════════');
+    console.log();
+
     const gitDir = path.join('.git');
     if (fs.existsSync(gitDir)) {
         const gitConfig = fs.readFileSync(path.join(gitDir, 'config'), 'utf8');
@@ -84,37 +119,41 @@ async function init() {
             console.log('  → Removing original git history and remote...');
             fs.rmSync(gitDir, { recursive: true, force: true });
             console.log('  ✓ Disconnected from original repository');
-            
-            const initGit = await question('\nInitialize new git repository? (Y/n): ');
-            if (initGit.toLowerCase() !== 'n') {
-                const { execSync } = require('child_process');
-                try {
-                    execSync('git init', { stdio: 'ignore' });
-                    execSync('git add -A', { stdio: 'ignore' });
-                    execSync('git commit -m "Initial commit"', { stdio: 'ignore' });
-                    console.log('  ✓ New git repository initialized with initial commit');
-                } catch (e) {
-                    console.log('  ✗ Git init failed. Run "git init" manually.');
-                }
-            }
         }
     }
 
-    // Self-destruct or rename
-    const deleteScript = await question('\nDelete init-project.js? (Y/n): ');
+    const initGit = await question('\nInitialize new git repository? (Y/n): ');
+    if (initGit.toLowerCase() !== 'n') {
+        try {
+            execSync('git init', { stdio: 'ignore' });
+            execSync('git add -A', { stdio: 'ignore' });
+            execSync('git commit -m "Initial commit"', { stdio: 'ignore' });
+            console.log('  ✓ New git repository initialized with initial commit');
+        } catch (e) {
+            console.log('  ✗ Git init failed. Run "git init" manually.');
+        }
+    }
+
+    // 5. Self-destruct
+    console.log();
+    const deleteScript = await question('Delete init-project.js? (Y/n): ');
     if (deleteScript.toLowerCase() !== 'n') {
         fs.unlinkSync('init-project.js');
         console.log('  ✓ init-project.js removed');
     }
 
+    // Done
     console.log();
     console.log('╔════════════════════════════════════════════════════════╗');
-    console.log('║  Project initialized!                                  ║');
+    console.log('║  Project ready!                                        ║');
     console.log('╚════════════════════════════════════════════════════════╝');
     console.log();
-    console.log('Next steps:');
-    console.log('  npm install');
+    console.log('Run the app:');
     console.log('  npm start');
+    console.log();
+    console.log('Package for distribution:');
+    console.log('  npm run package');
+    console.log('  npm run dist');
     console.log();
 
     rl.close();
