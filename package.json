@@ -7,7 +7,9 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "dist": "electron-builder",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "init": "node init-project.js",
+    "postinstall": "echo 'Run \"npm run init\" to customize this project for your needs'"
   },
   "build": {
     "appId": "com.raum.blank",
