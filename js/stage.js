@@ -3,6 +3,7 @@
 import '../nui2/NUI/nui.js';
 import { appWindow } from '../nui2/NUI/lib/modules/nui-app-window.js';
 import { contextMenu } from '../nui2/NUI/lib/modules/nui-context-menu.js';
+import snippets from './snippets.js';
 
 let g = {};
 
@@ -53,9 +54,46 @@ async function appStart() {
 		
 	}
 
-	win.content.addEventListener('nui-dropzone-drop', (e) => {
-		console.log(e.detail);
+	// Electron DND fix: preventDefault on document.body drag events to allow file access
+	// MUST be on document.body, not window, for Electron to populate dataTransfer.files
+	document.body.addEventListener('dragover', (e) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = 'copy';
 	});
+	document.body.addEventListener('drop', (e) => {
+		e.preventDefault();
+	});
+
+	const imageContainer = document.getElementById('image-container');
+
+	g.dropzone = nui.components.dropzone.create(
+		[
+			{ name: 'addfiles', label: 'Add files to list ...' },
+			{ name: 'replaceFiles', label: 'Replace list ...' }
+		],
+		(detail) => {
+			const { zone, dataTransfer } = detail || {};
+			if (!dataTransfer?.files?.length) return;
+
+			if (zone === 'replaceFiles') {
+				imageContainer.replaceChildren();
+			}
+
+			for (const file of dataTransfer.files) {
+				if (!file.type.startsWith('image/')) continue;
+				const url = (window.electron_helper && file.path)
+					? electron_helper.tools.path.resolve(file.path)
+					: URL.createObjectURL(file);
+				snippets.loadImage(url, imageContainer);
+			}
+		},
+		win.content
+	);
+
+	const spawnBtn = document.querySelector('nui-button button');
+	if (spawnBtn) {
+		spawnBtn.addEventListener('click', () => snippets.spawnWindow());
+	}
 
 	window.addEventListener('keydown', onKey);
 }

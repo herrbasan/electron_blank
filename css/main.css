@@ -5,3 +5,9 @@ html {
 .nui-app-main > main {
 	padding: var(--nui-space-double);
 }
+
+/* Fix dropzone to be viewport-fixed, not scrolling with content */
+nui-dropzone {
+	position: fixed !important;
+	inset: 0 !important;
+}
