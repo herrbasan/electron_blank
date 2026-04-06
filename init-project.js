@@ -5,7 +5,8 @@
  * Project Initialization Script
  * 
  * Run this after cloning to setup and customize the project.
- * Usage: node init-project.js
+ * Usage: npm run setup
+ *    or: node init-project.js
  */
 
 const fs = require('fs');

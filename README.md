@@ -20,7 +20,7 @@ git clone https://github.com/herrbasan/electron_blank.git my-app
 cd my-app
 
 # Run the init script to customize
-node init-project.js
+npm run setup
 
 # Install dependencies
 npm install

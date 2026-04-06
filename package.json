@@ -8,8 +8,8 @@
     "package": "electron-forge package",
     "dist": "electron-builder",
     "make": "electron-forge make",
-    "init": "node init-project.js",
-    "postinstall": "echo 'Run \"npm run init\" to customize this project for your needs'"
+    "setup": "node init-project.js",
+    "postinstall": "echo 'Run \"npm run setup\" to customize this project'"
   },
   "build": {
     "appId": "com.raum.blank",
