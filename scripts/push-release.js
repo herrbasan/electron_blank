@@ -55,12 +55,10 @@ async function main() {
 	}
 
 	// Check remote tag
-	try {
-		run(`git ls-remote --tags origin ${tag}`);
+	const remoteTag = run(`git ls-remote --tags origin ${tag}`);
+	if (remoteTag) {
 		console.error(`Abort: tag ${tag} already exists on origin.`);
 		process.exit(1);
-	} catch (e) {
-		// expected to fail if tag doesn't exist, but ls-remote returns empty on success
 	}
 
 	console.log(`\nNew version: ${newVersion}  (${tag})`);
