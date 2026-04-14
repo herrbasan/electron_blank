@@ -8,6 +8,7 @@
     "package": "electron-forge package",
     "dist": "electron-builder",
     "make": "electron-forge make",
+    "update-modules": "node scripts/update-modules.js",
     "postinstall": "echo 'Project ready. Run npm start to begin.'"
   },
   "build": {
