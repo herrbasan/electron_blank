@@ -12,15 +12,13 @@ A minimal Electron boilerplate with NUI2 for rapid application development.
 
 ## Quick Start
 
-### Clone and Initialize
+### Download from GitHub Releases
+
+The recommended way to start a new project is to download the latest release archive from the [GitHub Releases](https://github.com/herrbasan/electron_blank/releases) page. This gives you a clean, ready-to-use project without any git history.
 
 ```bash
-# Clone the repo
-git clone https://github.com/herrbasan/electron_blank.git my-app
+# Extract the archive and enter the folder
 cd my-app
-
-# Run the init script to customize
-npm run setup
 
 # Install dependencies
 npm install
@@ -29,12 +27,11 @@ npm install
 npm start
 ```
 
-### Manual Setup (without init script)
+### Clone (for development)
 
 ```bash
 git clone https://github.com/herrbasan/electron_blank.git
 cd electron_blank
-rm -rf .git
 npm install
 npm start
 ```
@@ -43,15 +40,17 @@ npm start
 
 ```
 my-app/
-├── js/
-│   ├── app.js              # Main process entry
-│   ├── stage.js            # Renderer logic
-│   └── snippets.js         # Reusable helpers
-├── electron_helper/
-│   └── helper_new.js       # IPC helper (main + preload)
-├── nui2/                   # NUI2 framework (submodule)
-├── css/main.css            # App styles
-├── index.html              # App shell
+├── app/
+│   ├── js/
+│   │   ├── app.js              # Main process entry
+│   │   ├── stage.js            # Renderer logic
+│   │   └── snippets.js         # Reusable helpers
+│   ├── modules/
+│   │   ├── electron_helper/
+│   │   │   └── helper_new.js   # IPC helper (main + preload)
+│   │   └── nui2/               # NUI2 framework (submodule)
+│   ├── css/main.css            # App styles
+│   └── index.html              # App shell
 └── package.json
 ```
 

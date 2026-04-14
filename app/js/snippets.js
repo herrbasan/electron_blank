@@ -1,6 +1,6 @@
 'use strict';
-import '../nui2/NUI/nui.js';
-import { appWindow } from '../nui2/NUI/lib/modules/nui-app-window.js';
+import '../modules/nui2/NUI/nui.js';
+import { appWindow } from '../modules/nui2/NUI/lib/modules/nui-app-window.js';
 
 let snippets = {};
 
@@ -25,7 +25,7 @@ async function loadImage(url, target){
 
 function spawnWindow(prop){
 	let sub = electron_helper.tools.browserWindow('frameless', {
-		webPreferences:{preload: electron_helper.tools.path.join(__dirname, '../electron_helper/helper_new.js')},
+		webPreferences:{preload: electron_helper.tools.path.join(__dirname, '../modules/electron_helper/helper_new.js')},
 		devTools: false,
 		width:1280, 
 		height:800,
@@ -36,8 +36,8 @@ function spawnWindow(prop){
 			<html>
 				<head>
 					<title>NUI Playground</title>
-					<link rel="stylesheet" href="nui2/NUI/css/nui-theme.css">
-					<link rel="stylesheet" href="nui2/NUI/css/modules/nui-app-window.css">
+					<link rel="stylesheet" href="./app/modules/nui2/NUI/css/nui-theme.css">
+					<link rel="stylesheet" href="./app/modules/nui2/NUI/css/modules/nui-app-window.css">
 					<style>
 						html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
 						main { display: flex; flex-direction: column; height: 100%; }
@@ -46,12 +46,12 @@ function spawnWindow(prop){
 				</head>
 				<body class="dark">
 					<main>
-						<iframe src="nui2/Playground/index.html"></iframe>
+						<iframe src="./app/modules/nui2/Playground/index.html"></iframe>
 					</main>
 				</body>
 				<script type="module">
-					import './nui2/NUI/nui.js';
-					import { appWindow } from './nui2/NUI/lib/modules/nui-app-window.js';
+					import './app/modules/nui2/NUI/nui.js';
+					import { appWindow } from './app/modules/nui2/NUI/lib/modules/nui-app-window.js';
 					document.addEventListener('DOMContentLoaded', () => {
 						const win = appWindow({
 							icon: 'palette',

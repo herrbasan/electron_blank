@@ -3,8 +3,8 @@ if(require('electron-squirrel-startup')) return;
 const {app, BrowserWindow, Menu} = require('electron');
 const path = require('path');
 const fs = require("fs").promises;
-const helper = require('../electron_helper/helper_new.js');
-const update = require('../electron_helper/update.js');
+const helper = require('../modules/electron_helper/helper_new.js');
+const update = require('../modules/electron_helper/update.js');
 
 //app.commandLine.appendSwitch('high-dpi-support', 'false');
 //app.commandLine.appendSwitch('force-device-scale-factor', '1');
@@ -61,11 +61,11 @@ function startUp(){
 async function appStart(){
     fb('Init Windows');
 	let win = await helper.tools.browserWindow('frameless', {
-		webPreferences:{preload: path.join(__dirname, '../electron_helper/helper_new.js')},
+		webPreferences:{preload: path.join(__dirname, '../modules/electron_helper/helper_new.js')},
 		devTools: !env.isPackaged,
 		width:960, 
 		height:740,
-		file:'index.html'
+		file:'app/index.html'
 	});
 
     //Menu.setApplicationMenu( Menu.buildFromTemplate( [{ label:'File', submenu: [{role: 'quit'}]}] ) );

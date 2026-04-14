@@ -2,14 +2,13 @@
   "name": "electron_blank",
   "version": "1.0.0",
   "description": "Blank Electron Project",
-  "main": "js/app.js",
+  "main": "app/js/app.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "dist": "electron-builder",
     "make": "electron-forge make",
-    "setup": "node init-project.js",
-    "postinstall": "echo 'Run \"npm run setup\" to customize this project'"
+    "postinstall": "echo 'Project ready. Run npm start to begin.'"
   },
   "build": {
     "appId": "com.raum.blank",

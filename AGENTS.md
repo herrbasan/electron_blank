@@ -35,18 +35,18 @@ Blank Electron project using a custom helper library for IPC between main and re
 ## Startup Flow
 
 ```
-electron → js/app.js (main) → helper creates window with preload → index.html → js/stage.js (renderer)
+electron → app/js/app.js (main) → helper creates window with preload → app/index.html → app/js/stage.js (renderer)
 ```
 
-### 1. Main Process (`js/app.js`)
+### 1. Main Process (`app/js/app.js`)
 
-- Entry point defined in `package.json` → `"main": "js/app.js"`
-- Requires `electron_helper/helper_new.js` (the active helper version)
+- Entry point defined in `package.json` → `"main": "app/js/app.js"`
+- Requires `app/modules/electron_helper/helper_new.js` (the active helper version)
 - Sets up `global.env` with path info (handles packaged vs unpackaged, portable)
 - Reads `config.json` from app directory via `helper.tools.readJSON()`
-- If packaged: runs auto-updater via `electron_helper/update.js` first
+- If packaged: runs auto-updater via `app/modules/electron_helper/update.js` first
 - Calls `helper.tools.browserWindow()` to create the main window
-- **Important:** The window is created with `preload: electron_helper/helper_new.js`
+- **Important:** The window is created with `preload: app/modules/electron_helper/helper_new.js`
 - No application logic — just bootstrapping
 
 ### 2. Dual-Context Helper Architecture
@@ -119,9 +119,9 @@ electron_helper.tools.browserWindow() ─IPC─► new BrowserWindow() → retur
 
 **Current usage:** `helper_new.js` is the active and only helper version used across the project.
 
-### 4. Renderer Stage (`js/stage.js`)
+### 4. Renderer Stage (`app/js/stage.js`)
 
-- ES module loaded by `index.html` via `<script type="module">`
+- ES module loaded by `app/index.html` via `<script type="module">`
 - All application logic lives here
 - Checks `window.electron_helper` to determine if running in Electron or browser
 - `initElectron()` — called when helper is available:
@@ -131,7 +131,7 @@ electron_helper.tools.browserWindow() ─IPC─► new BrowserWindow() → retur
 - `appStart()` — initializes the NUI framework and builds the UI
 - Keyboard shortcuts: F11=fullscreen, F12=devtools, Esc=exit
 
-### 5. Snippets (`js/snippets.js`)
+### 5. Snippets (`app/js/snippets.js`)
 
 - Reusable helper functions for the stage
 - `loadImage()` — loads images via `electron_helper.tools.loadImage()` (falls back to dummy in browser)
@@ -139,17 +139,17 @@ electron_helper.tools.browserWindow() ─IPC─► new BrowserWindow() → retur
 
 ## NUI Framework
 
-Located in `nui/` submodule. Custom UI library that provides:
+Located in `app/modules/nui2/` submodule. Custom UI library that provides:
 
 - `nui.js` — core framework
 - `nui_app.js` — application window chrome / lifecycle
 - `nui_ut.js` — utility functions (DOM helpers, createElement, headImport, etc.)
 - Various components (gallery, graph, list, media player, etc.)
-- CSS in `nui/css/`
+- CSS in `app/modules/nui2/NUI/css/`
 
 The NUI framework provides the window chrome and UI components. `nui_app.appWindow()` initializes the app shell within the renderer.
 
-## Auto-Updater (`electron_helper/update.js`)
+## Auto-Updater (`app/modules/electron_helper/update.js`)
 
 - Main process only module
 - Supports two update sources: HTTP server and GitHub releases
@@ -173,16 +173,20 @@ The NUI framework provides the window chrome and UI components. `nui_app.appWind
 
 ```
 electron_blank/
-├── js/
-│   ├── app.js          # Main process entry
-│   ├── stage.js        # Renderer application logic
-│   └── snippets.js     # Reusable stage helpers
-├── electron_helper/
-│   ├── helper_new.js   # Core helper (active version, unified API)
-│   ├── update.js       # Auto-updater (main process only)
-│   └── test.js         # Test module
-├── nui/                # UI framework submodule
-├── index.html          # Shell HTML, loads stage.js
+├── app/
+│   ├── js/
+│   │   ├── app.js          # Main process entry
+│   │   ├── stage.js        # Renderer application logic
+│   │   └── snippets.js     # Reusable stage helpers
+│   ├── css/
+│   │   └── main.css        # App styles
+│   ├── modules/
+│   │   ├── electron_helper/
+│   │   │   ├── helper_new.js   # Core helper (active version, unified API)
+│   │   │   ├── update.js       # Auto-updater (main process only)
+│   │   │   └── test.js         # Test module
+│   │   └── nui2/               # UI framework submodule
+│   └── index.html          # Shell HTML, loads stage.js
 ├── config.json         # App configuration
 └── package.json        # Electron + forge config
 ```

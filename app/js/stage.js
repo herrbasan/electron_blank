@@ -1,8 +1,8 @@
 'use strict';
 
-import '../nui2/NUI/nui.js';
-import { appWindow } from '../nui2/NUI/lib/modules/nui-app-window.js';
-import { contextMenu } from '../nui2/NUI/lib/modules/nui-context-menu.js';
+import '../modules/nui2/NUI/nui.js';
+import { appWindow } from '../modules/nui2/NUI/lib/modules/nui-app-window.js';
+import { contextMenu } from '../modules/nui2/NUI/lib/modules/nui-context-menu.js';
 import snippets from './snippets.js';
 
 let g = {};
