@@ -13,10 +13,13 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout with submodules
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init app/modules/electron_helper
+          git submodule update --init app/modules/nui2
 
       - name: Setup Node
         uses: actions/setup-node@v4
