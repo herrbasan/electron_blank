@@ -1,6 +1,6 @@
 {
   "name": "electron_blank",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Blank Electron Project",
   "main": "app/js/app.js",
   "scripts": {
