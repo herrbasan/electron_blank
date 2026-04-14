@@ -17,10 +17,12 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const ROOT = process.cwd();
-const DIST_DIR = path.join(ROOT, 'dist');
-const BUILD_DIR = path.join(DIST_DIR, 'electron_blank');
-const ZIP_NAME = `electron_blank-${process.env.GITHUB_REF_NAME || 'snapshot'}.zip`;
-const ZIP_PATH = path.join(DIST_DIR, ZIP_NAME);
+const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+const version = process.env.GITHUB_REF_NAME || pkg.version;
+const OUT_DIR = path.join(ROOT, 'out');
+const BUILD_DIR = path.join(OUT_DIR, 'electron_blank');
+const ZIP_NAME = `electron_blank-${version}.zip`;
+const ZIP_PATH = path.join(OUT_DIR, ZIP_NAME);
 
 const projectName = process.env.RELEASE_NAME || 'electron_blank';
 const projectTitle = process.env.RELEASE_TITLE || projectName;
@@ -33,7 +35,6 @@ const EXCLUDES = new Set([
 	'.gitmodules',
 	'node_modules',
 	'out',
-	'dist',
 	'_Archive',
 	'project_snapshot.txt',
 	'init-project.js'
@@ -138,7 +139,7 @@ function main() {
 		fs.unlinkSync(ZIP_PATH);
 	}
 	try {
-		execSync(`zip -r "${ZIP_NAME}" electron_blank`, { cwd: DIST_DIR, stdio: 'inherit' });
+		execSync(`zip -r "${ZIP_NAME}" electron_blank`, { cwd: OUT_DIR, stdio: 'inherit' });
 	} catch {
 		execSync(`powershell -Command "Compress-Archive -Path '${BUILD_DIR}' -DestinationPath '${ZIP_PATH}'"`, { cwd: ROOT, stdio: 'inherit' });
 	}
