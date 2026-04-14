@@ -9,6 +9,7 @@
     "dist": "electron-builder",
     "make": "electron-forge make",
     "update-modules": "node scripts/update-modules.js",
+    "push-release": "node scripts/push-release.js",
     "postinstall": "echo 'Project ready. Run npm start to begin.'"
   },
   "build": {
