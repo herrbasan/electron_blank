@@ -62,7 +62,7 @@ async function main() {
 	}
 
 	console.log(`\nNew version: ${newVersion}  (${tag})`);
-	const confirm = await question('Proceed? (Y/n) ');
+	const confirm = process.env.CI ? 'Y' : await question('Proceed? (Y/n) ');
 	if (confirm.toLowerCase() === 'n') {
 		console.log('Aborted.');
 		process.exit(0);
